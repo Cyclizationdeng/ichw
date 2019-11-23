@@ -1,0 +1,51 @@
+CURRENCY.py
+
+
+
+
+currencyfrom=str(input())#input currency which need to be exchanged from
+currencyto=str(input())#input currency which need to be exchanged to
+amount=str(input())#inpit amount of money that users would exchange
+from urllib.request import urlopen #import URL function
+a='http://cs1110.cs.cornell.edu/2018fa/a1server.php?from=' #input part of the URL
+b=a+currencyfrom+'&to='+currencyto+'&amt='+amount #input whold URL with input data
+doc = urlopen(b)
+docstr = doc.read()
+doc.close()
+jstr = docstr.decode('ascii') #decode output data
+
+import re
+digital=(re.findall(r"\d+\.?\d*",jstr)) #find all numbers data in jstr
+l=list(digital) 
+amountfrom=(l[0])
+amountto=(l[1]) #convert output to two discrete data
+output='you can exchange'+' '+amountfrom+' '+currencyfrom+' to'+' '+amountto+' '+currencyto
+print(output)
+
+
+以下为测试函数
+
+
+def test(testcurrencyfrom,testcurrencyto,testamount):
+    from urllib.request import urlopen 
+    testa='http://cs1110.cs.cornell.edu/2018fa/a1server.php?from=' 
+    testb=testa+testcurrencyfrom+'&to='+testcurrencyto+'&amt='+testamount 
+    testdoc = urlopen(testb)
+    testdocstr = testdoc.read()
+    testdoc.close()
+    testjstr = testdocstr.decode('ascii')
+    import re
+    testdigital=(re.findall(r"\d+\.?\d*",testjstr)) 
+    testl=list(testdigital) 
+    testamountfrom=(testl[0])
+    testamountto=(testl[1])
+    print(testamountto)
+
+test(testcurrencyfrom='USD',testcurrencyto='EUR',testamount='2.5')
+test(testcurrencyfrom='USD',testcurrencyto='CNY',testamount='3.0')
+test(testcurrencyfrom='CNY',testcurrencyto='EUR',testamount='100')
+test(testcurrencyfrom='EUR',testcurrencyto='IRR',testamount='0.54')
+test(testcurrencyfrom='BGN',testcurrencyto='MVR',testamount='10')
+print('All tests have passed')
+
+
