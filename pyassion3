@@ -1,0 +1,57 @@
+def main():
+    def change(x):
+        t = []
+        t.append(x%m)
+        t.append(x//m)
+        return t
+
+    def brick(u,v,x):
+        brick = []
+        for i in range(u):
+            for j in range(v):
+                brick.append(x + i + m * j)
+        return brick
+
+    def judgebrick(u,v,x,p):
+        if (change(x)[0]+u-1) >= m or (change(x,)[1]+v-1) >= n:
+            return False
+        for i in brick(u,v,x):
+            for j in range(p):
+                if i in solution[j]:
+                    return False
+        return True
+
+    def conflict(x,p,solution):
+        for i in range(p):
+            if x in solution[i]:
+                return True
+        return False
+
+    def solve(x,p):
+        if p == m*n//(a*b):
+            print(solution)
+            allsolution.append(solution[:])
+        else:
+            if conflict(x,p,solution):
+                solve(x+1,p)
+            if not conflict(x,p,solution):
+                if judgebrick(a,b,x,p):
+                    solution[p] = brick(a,b,x)
+                    solve(x+1,p+1)
+                if judgebrick(b,a,x,p):
+                    solution[p] = brick(b,a,x)
+                    solve(x+1,p+1)
+    m = int(input('write down the lenth of the tile: '))
+    n = int(input('write down the wedth of the tile: '))
+    a = int(input('write down one lenth of the brick: '))
+    b = int(input('write down another lenth of the brick: '))
+    solution = [0 for i in range(m*n//(a*b))]
+    allsolution = []
+    solve(0,0)
+
+    print('总数='+str(len(allsolution)))
+
+if __name__ == '__main__':
+
+    main()
+
