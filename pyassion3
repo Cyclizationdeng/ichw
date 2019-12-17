@@ -49,9 +49,58 @@ def main():
     allsolution = []
     solve(0,0)
 
-    print('总数='+str(len(allsolution)))
-
-if __name__ == '__main__':
-
+    import turtle 
+        print('总数='+str(len(allsolution)))
+        num = turtle.numinput('decide on which filling approach you wanna see',\
+            'ranging from 1-'+str(len(allsolution)),1,minval=1,maxval=len(allsolution))
+        k = int(num)
+        turtle.speed(0)
+        turtle.penup()
+        turtle.goto(-m*30,-n*30)
+        turtle.pendown()
+        turtle.pensize(6)
+        for i in range(2):
+            turtle.fd(m*60)
+            turtle.lt(90)
+            turtle.fd(n*60)
+            turtle.lt(90)
+        turtle.lt(90)
+        turtle.pensize(0)
+        turtle.color('blue')
+        for i in range(1,m):
+            turtle.penup()
+            turtle.goto(-m*30+60*i,-n*30)
+            turtle.pendown()
+            turtle.fd(n*60)
+        turtle.rt(90)
+        for i in range(1,n):
+            turtle.penup()
+            turtle.goto(-m*30,-n*30+60*i)
+            turtle.pendown()
+            turtle.fd(m*60)
+        turtle.pensize(2)
+        for i in range(m):
+            for j in range(n):
+                turtle.penup()
+                turtle.goto(i*60+30-m*30,j*60+30-n*30)
+                turtle.pendown()
+                turtle.write(i+m*j)
+        turtle.color('black')
+        turtle.pensize(4)
+        for element in allsolution[k-1]:
+            element.sort()
+            x1 = change(element[0])[0]
+            y1 = change(element[0])[1]
+            x2 = change(element[-1])[0]
+            y2 = change(element[-1])[1]
+            turtle.penup()
+            turtle.goto(x1*60-m*30,y1*60-n*30)
+            turtle.pendown()
+            turtle.goto(x2*60+60-m*30,y1*60-n*30)
+            turtle.goto(x2*60+60-m*30,y2*60+60-n*30)
+            turtle.goto(x1*60-m*30,y2*60+60-n*30)
+            turtle.goto(x1*60-m*30,y1*60-n*30)
+        turtle.done()        
+    if __name__ == '__main__':
     main()
 
