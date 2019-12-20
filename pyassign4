@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+
+"""wcount.py: count words from an Internet file.
+
+__author__ = "Deng Haoyang"
+__pkuid__  = "1900011721"
+__email__  = "denghaoyang@pku.edu.cn"
+"""
+#学长实在不好意思，这个函数我查了半天依然没有弄明白，但是下面的wcount函数可以正确运行
+import sys
+from urllib.request import urlopen
+
+#下面定义一个wcount函数
+def wcount(lines,topn):#首先定义输入2个变量lines和topn，若无topn输入则默认10
+
+#将输入的lines变量转化为列表
+    b=list(lines)
+
+#用一个字符串表示文章中可能出现的数字，标点，特殊字符等非字母字符串
+    puctuation='''`~1234567890!@#$%^&*()_+=|\}]{['":;,<.>/?，。“”：；‘’、】【（）…￥！~·《》'''
+
+#定义一个空列表article，将输入的lines中在puctuation中存在的字符串删除
+    article=[]
+    for i in b:
+        if i not in puctuation:
+            article.append(i)
+
+#将article列表重新组合成字符串，为了将每个单词还原，之后将它们全部小写化，在以split分开，形成新列表list
+    words=(''.join(article)).lower().split()
+
+#定义一个新列表seenwords，其中是列表words中每个出现过的元素，并用sort永久排序
+    seenwords=[]
+    for i in words:
+        if i in seenwords:
+            pass
+        else:
+            seenwords.append(i)
+    seenwords.sort()
+
+#定义一个新列表wordfrequency，将每个在seenwords列表中出现过的元素在列表words中统计，并形成列表嵌套，嵌套内的列表为[词频，单词]，并对wordfrequency列表进行永久逆序排序
+    wordfrequency=[]
+    for i in seenwords:
+        frequency=0
+        for j in words:
+            if j==i:
+                frequency=frequency+1
+        wordfrequency.append([frequency,i])
+    wordfrequency.sort(reverse=True)
+
+#为了防止topn>总共出现过的单词数而runtime error，给出变量p，p为wordfrequency列表长度与topn中较小的一个
+    if len(seenwords)<topn:
+        p=len(seenwords)
+    else:
+        p=topn
+
+#输出字符串为output，从0到p进行遍历
+    output=''
+    for i in range(p):
+
+#为了使输出数字在同一列，通过空格数调整位置，假定单词长度不超过25，则需要输出的空格数由以下程序给出
+        konggeshu=25-len(wordfrequency[i][1])
+        kongge=[]
+        for j in range(konggeshu):
+            kongge.append(' ')
+        shuchukongge=''.join(kongge)
+
+#输出为列表wordfrequency中第i项中的第1个，即单词，加上空格数，再加上字符串格式的相应的数字，换行
+        output=output+wordfrequency[i][1]+shuchukongge+str(wordfrequency[i][0])+'\n'
+
+#此时输出会有最后的空行，下面的程序通过列表删除最后一个元素来消除这个空行
+    shuchulist=list(output)
+    del shuchulist[-1]
+    output=''.join(shuchulist)
+    return output
+
+#从这里开始输入，因为不知道输入数据中是否有分行或者空行，采用以下循环，当某行的输入数据仅为数字（这个数字就是统计的单词数）时，结束输入，开始运行程序
+a=input().strip()
+shuchu=a+' '
+while a.isdigit() is not True:
+    a=input().strip()
+
+#这里为了避免输入数据为空行
+    if len(a)==0:
+        pass
+    else:
+        shuchu=shuchu+a+' '
+
+#如果不想输入统计词的数量，请输入0，此时自动统计10个
+else:
+    if int(a)>0:
+        top=int(a)
+    else:
+        top=10
+
+#由于此时的shuchu中的最后会有一个空格，位置位数的数字以及另外一个空格，采用以下程序予以删除
+liebiao=list(shuchu)
+del liebiao[-1]
+while liebiao[-1].isdigit():
+    del liebiao[-1]
+del liebiao[-1]
+line=''.join(liebiao)
+
+#这个函数依然没有看懂，不是很明白用URL的方法，为了使wcount能正常运行，在前面加一个#
+#if  len(sys.argv) == 1:
+#        print('Usage: {} url [topn]'.format(sys.argv[0]))
+#        print('  url: URL of the txt file to analyze ')
+#        print('  topn: how many (words count) to output. If not given, will output top 10 words')
+#        sys.exit(1)
+
+print(wcount(line,top))
+
+下面是对Alice's wonderland的前50词频统计
+the                      808
+and                      403
+a                        329
+to                       326
+of                       317
+she                      238
+in                       226
+it                       183
+you                      170
+was                      168
+alice                    167
+said                     144
+i                        127
+with                     114
+or                       112
+that                     111
+her                      109
+as                       101
+this                     96
+at                       94
+project                  86
+all                      79
+on                       75
+for                      74
+had                      65
+is                       63
+not                      62
+little                   59
+be                       57
+gutenberg-tm             56
+out                      53
+but                      52
+down                     51
+any                      51
+work                     50
+if                       47
+by                       47
+do                       46
+up                       44
+very                     42
+its                      41
+about                    41
+so                       40
+they                     39
+into                     39
+when                     38
+no                       38
+are                      38
+what                     36
+one                      36
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+    
+    
+
+            
+
+
+
